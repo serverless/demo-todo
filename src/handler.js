@@ -6,7 +6,7 @@ const { User } = require('./models/User')
 
 
 /**
- * Users
+ *  Get All Users
  */
 app.get('/users', async (req,res) => {
   try {
@@ -20,6 +20,24 @@ app.get('/users', async (req,res) => {
   }
 })
 
+/**
+ *  Create a User
+ */
+app.post('/users', async (req,res) => {
+  try {
+    const putParams = User.put(req.body)
+    const response = await DocumentClient.put(putParams).promise()
+    const user = User.parse(response.Item)
+    res.status(200).json({ status: 'ok', user })
+  } catch (err) {
+    console.error('Error creating user', req.body, err)
+    res.sendStatus(500)
+  }
+})
+
+/**
+ *  Get One Users
+ */
 app.get('/users/:userId', async (req,res) => {
   try {
     const getParams = User.get({pk: `user#${req.params.userId }`})
