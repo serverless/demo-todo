@@ -1,0 +1,85 @@
+service: demo-todo
+
+custom:
+  stage: ${opt:stage, 'dev'}
+  tableName: ${self:service}-${self:custom.stage}
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  memorySize: 128
+  timeout: 8
+  iamRoleStatements: # IAM Role Permissions
+    - Effect: "Allow"
+      Action:
+        - "logs:CreateLogGroup"
+        - "logs:CreateLogStream"
+        - "logs:PutLogEvents"
+      Resource: "*"
+    - Effect: Allow
+      Action: 
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: 
+        - { "Fn::GetAtt": ["demoTodoTable", "Arn" ] }
+        - Fn::Join:
+          - "/"
+          -
+            - { "Fn::GetAtt": ["demoTodoTable", "Arn" ] }
+            - "index/*"
+functions:
+  router:
+    handler: src/handler.router
+    environment: 
+      TODO_TABLENAME: ${self:custom.tableName}
+    events: 
+      - http:
+          method: any
+          path: 'v1/{proxy+}'
+
+resources:
+  Resources:
+    demoTodoTable: 
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.tableName}
+        AttributeDefinitions:
+          - AttributeName: pk
+            AttributeType: S
+          - AttributeName: sk
+            AttributeType: S
+          - AttributeName: lsi
+            AttributeType: S
+          - AttributeName: gsi1pk
+            AttributeType: S
+          - AttributeName: gsi1sk
+            AttributeType: S
+        KeySchema:
+          - AttributeName: pk
+            KeyType: HASH
+          - AttributeName: sk
+            KeyType: RANGE
+        LocalSecondaryIndexes:
+          - IndexName: lsi
+            Projection: 
+              ProjectionType: ALL
+            KeySchema:
+              - AttributeName: pk
+                KeyType: HASH
+              - AttributeName: lsi
+                KeyType: RANGE
+        GlobalSecondaryIndexes:
+          - IndexName: gsi1
+            Projection: 
+              ProjectionType: ALL
+            KeySchema:
+              - AttributeName: gsi1pk
+                KeyType: HASH
+              - AttributeName: gsi1sk
+                KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
