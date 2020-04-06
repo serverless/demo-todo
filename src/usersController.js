@@ -56,7 +56,7 @@ module.exports = function(app, DocumentClient) {
     }
   })
 
-  app.patch('/users/:userId', (req,res) => {
+  app.patch('/users/:userId', async (req,res) => {
     randomError()
     try {
       const getParams = User.get({pk: `user#${req.params.userId }`})
