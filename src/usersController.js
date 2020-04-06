@@ -23,6 +23,7 @@ module.exports = function(app, DocumentClient) {
     try {
       const putParams = User.put(req.body, { ReturnValues: 'ALL_OLD' })
       const response = await DocumentClient.put(putParams).promise()
+      console.log(JSON.stringify(response, null, 2))
       const user = User.parse(response.Item)
       res.status(200).json({ status: 'ok', user })
     } catch (err) {
