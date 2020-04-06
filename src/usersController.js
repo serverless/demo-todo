@@ -21,7 +21,7 @@ module.exports = function(app, DocumentClient) {
    */
   app.post('/users', async (req,res) => {
     try {
-      const putParams = User.put(req.body, { ReturnValues: 'ALL_NEW' })
+      const putParams = User.put(req.body, { ReturnValues: 'ALL_OLD' })
       const response = await DocumentClient.put(putParams).promise()
       const user = User.parse(response.Item)
       res.status(200).json({ status: 'ok', user })
