@@ -1,10 +1,18 @@
 const { User } = require('./models/User')
+const _ = require('lodash')
+
+function randomError() {
+  if (_.random(20) === 1 ) {
+    throw new Error('This is a random error')
+  }
+}
 
 module.exports = function(app, DocumentClient) {
     /**
    *  Get All Users
    */
   app.get('/users', async (req,res) => {
+    randomError()
     try {
       const queryParams = User.query('user', { index: 'gsi1', limit: 10 })
       const response = await DocumentClient.query(queryParams).promise()
@@ -20,10 +28,10 @@ module.exports = function(app, DocumentClient) {
    *  Create a User
    */
   app.post('/users', async (req,res) => {
+    randomError()
     try {
-      const putParams = User.put(req.body, { ReturnValues: 'ALL_OLD' })
-      const response = await DocumentClient.put(putParams).promise()
-      console.log(JSON.stringify(response, null, 2))
+      const putParams = User.put(req.body)
+      await DocumentClient.put(putParams).promise()
       const user = User.parse(putParams.Item)
       res.status(200).json({ status: 'ok', user })
     } catch (err) {
@@ -36,9 +44,9 @@ module.exports = function(app, DocumentClient) {
    *  Get One User
    */
   app.get('/users/:userId', async (req,res) => {
+    randomError()
     try {
       const getParams = User.get({pk: `user#${req.params.userId }`})
-      console.log({getParams})
       const response = await DocumentClient.get(getParams).promise()
       const user = User.parse(response.Item)
       res.status(200).json({ status: 'ok', user })
@@ -49,6 +57,21 @@ module.exports = function(app, DocumentClient) {
   })
 
   app.patch('/users/:userId', (req,res) => {
-    res.status(200).json({ status: 'ok', userId: req.params.userId })
+    randomError()
+    try {
+      const getParams = User.get({pk: `user#${req.params.userId }`})
+      let response = await DocumentClient.get(getParams).promise()
+      const user = User.parse(response.Item)
+      const updatedUser = {
+        ...user,
+        ...req.body
+      }
+      const putParams = User.put(updatedUser)
+      await DocumentClient.put(putParams).promise()
+      res.status(200).json({ status: 'ok', user: updatedUser })
+    } catch (err) {
+      console.error('Error updating user', req.params.userId, err)
+      res.sendStatus(500)
+    }
   })
 }
