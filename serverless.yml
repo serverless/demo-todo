@@ -1,5 +1,8 @@
 service: demo-todo
 
+org: serverlessteam
+app: demo-todo
+
 custom:
   stage: ${opt:stage, 'dev'}
   tableName: ${self:service}-${self:custom.stage}
