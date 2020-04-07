@@ -1,6 +1,7 @@
 const AWS = require('aws-sdk')
 AWS.config.update({region: 'us-east-1'});
 const DocumentClient = new AWS.DynamoDB.DocumentClient()
+const { User } = require('./models/User')
 const _ = require('lodash')
 const faker = require('faker')
 const axios = require('axios')
