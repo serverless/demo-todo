@@ -50,5 +50,10 @@ module.exports.deploy = async function () {
   runCommand(`git config --local user.name ${GITHUB_USERNAME}`)
   runCommand('git add .')
   runCommand('git commit -m "commit by :robot:"')
+  // replace the remote with an authenticated one
+  runCommand('git remote rm origin')
+  runCommand(
+    `git remote add origin https://${GITHUB_USERNAME}:${GITHUB_TOKEN}@${gitRepositoryURL}`
+  )
   runCommand(`git push --porcelain --set-upstream origin ${gitBranch}`)  
 }
