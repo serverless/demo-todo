@@ -47,13 +47,13 @@ functions:
           method: any
           path: 'v1/{proxy+}'
   invoker:
-    handle: src/invoker.invoke
+    handler: src/invoker.invoke
     events:
       - schedule:
           rate: rate(3 minutes)
     environment:
       BASE_URL:  
-        "Fn::Join":
+        Fn::Join:
           - ""
           -
             - "https://"
