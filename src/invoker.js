@@ -11,7 +11,7 @@ async function createUser() {
   const firstName = faker.name.firstName()
   const lastName = faker.name.lastName()
   console.log('Base url:', process.env.BASE_URL)
-  await axios.post(`${process.env.BASE_URL}/users`, { firstName, lastName })
+  await axios.post(`${process.env.BASE_URL}/v1/users`, { firstName, lastName })
 }
 
 async function deleteUser() {
@@ -19,7 +19,7 @@ async function deleteUser() {
   const usersQuery = User.query('user', { index: 'gsi1', limit: 10 })
   const usersResp = await DocumentClient.query(usersQuery).promise()
   const users = User.parse(usersResp.Items)
-  await axios.delete(`${process.env.BASE_URL}/users/${user.id}`)
+  await axios.delete(`${process.env.BASE_URL}/v1/users/${user.id}`)
 }
 
 async function getUser() {
@@ -27,7 +27,7 @@ async function getUser() {
   const usersQuery = User.query('user', { index: 'gsi1', limit: 10 })
   const usersResp = await DocumentClient.query(usersQuery).promise()
   const users = User.parse(usersResp.Items)
-  await axios.get(`${process.env.BASE_URL}/users/${user.id}`)
+  await axios.get(`${process.env.BASE_URL}/v1/users/${user.id}`)
 }
 
 
