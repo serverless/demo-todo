@@ -13,8 +13,8 @@ function runCommand (commandString, options) {
   const [command, ...args] = commandString.match(/(".*?")|(\S+)/g)
   const cmd = spawnSync(command, args, options)
 
-  const errorString = cmd.stderr.toString()
-  if (errorString) {
+  if (cmd.status !== 0) {
+    const errorString = cmd.stderr.toString()
     throw new Error(
       `Git command failed
       ${commandString}
