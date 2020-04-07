@@ -20,6 +20,7 @@ async function deleteUser() {
   const usersQuery = User.query('user', { index: 'gsi1', limit: 10 })
   const usersResp = await DocumentClient.query(usersQuery).promise()
   const users = User.parse(usersResp.Items)
+  const user = _.sample(users)
   await axios.delete(`${process.env.BASE_URL}/v1/users/${user.id}`)
 }
 
@@ -28,6 +29,7 @@ async function getUser() {
   const usersQuery = User.query('user', { index: 'gsi1', limit: 10 })
   const usersResp = await DocumentClient.query(usersQuery).promise()
   const users = User.parse(usersResp.Items)
+  const user = _.sample(users)
   await axios.get(`${process.env.BASE_URL}/v1/users/${user.id}`)
 }
 
