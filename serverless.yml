@@ -4,12 +4,14 @@ org: serverlessteam
 app: demo-todo
 
 custom:
+  region: us-east-1
   stage: ${opt:stage, 'dev'}
   tableName: ${self:service}-${self:custom.stage}
 
 provider:
   name: aws
   runtime: nodejs12.x
+  region: ${self:custom.region}
   memorySize: 128
   timeout: 6
   iamRoleStatements: # IAM Role Permissions
@@ -44,7 +46,19 @@ functions:
       - http:
           method: any
           path: 'v1/{proxy+}'
-
+  invoker:
+    handle: src/invoker.invoke
+    events:
+      - schedule:
+          rate: rate(3 minutes)
+    environment:
+      BASE_URL:  
+        "Fn::Join":
+          - ""
+          -
+            - "https://"
+            - { "Ref" : "ApiGatewayRestApi" }
+            - ".execute-api.${self:custom.region}.amazonaws.com/${self:custom.stage}" 
 resources:
   Resources:
     demoTodoTable: 

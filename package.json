@@ -10,7 +10,9 @@
   "license": "ISC",
   "dependencies": {
     "aws-sdk": "^2.653.0",
+    "axios": "^0.19.2",
     "dynamodb-toolbox": "github:dakaz/dynamodb-toolbox#query",
+    "faker": "^4.1.0",
     "lambda-api": "^0.10.5",
     "lodash": "^4.17.15",
     "serverless": "^1.67.0",
