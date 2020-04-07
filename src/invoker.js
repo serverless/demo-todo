@@ -24,6 +24,19 @@ async function deleteUser() {
   await axios.delete(`${process.env.BASE_URL}/v1/users/${user.id}`)
 }
 
+async function updateUser() {
+  console.log('deleting user')
+  const usersQuery = User.query('user', { index: 'gsi1', limit: 10 })
+  const usersResp = await DocumentClient.query(usersQuery).promise()
+  const users = User.parse(usersResp.Items)
+  const user = _.sample(users)
+  const updatedUser = {
+    ...user,
+    firstName: faker.name.firstName()
+  }
+  await axios.patch(`${process.env.BASE_URL}/v1/users/${user.id}`, updatedUser)
+}
+
 async function getUser() {
   console.log('getting user')
   const usersQuery = User.query('user', { index: 'gsi1', limit: 10 })
@@ -47,6 +60,10 @@ const actions = [
   getUser,
   getUser,
   getUser,
+  updateUser,
+  updateUser,
+  updateUser,
+  updateUser,
   deleteUser,
   deleteUser  
 ]

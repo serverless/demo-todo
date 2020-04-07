@@ -49,6 +49,7 @@ module.exports = function(app, DocumentClient) {
       const getParams = User.get({pk: `user#${req.params.userId }`})
       const response = await DocumentClient.get(getParams).promise()
       const user = User.parse(response.Item)
+      req.context.serverlessSdk.tagEvent('user', req.params.userId, user)
       res.status(200).json({ status: 'ok', user })
     } catch (err) {
       console.error('Error fetching user', req.params.userId, err)
@@ -68,6 +69,7 @@ module.exports = function(app, DocumentClient) {
       }
       const putParams = User.put(updatedUser)
       await DocumentClient.put(putParams).promise()
+      req.context.serverlessSdk.tagEvent('user', req.params.userId, updatedUser)
       res.status(200).json({ status: 'ok', user: updatedUser })
     } catch (err) {
       console.error('Error updating user', req.params.userId, err)
