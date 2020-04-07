@@ -35,7 +35,7 @@ module.exports.deploy = async function () {
   runCommand(`git clone --quiet https://${gitRepositoryURL}`)
   process.chdir(path.join(process.cwd(), repositoryName))
 
-  const gitBranch = process.env.STAGE === 'prod' ? 'master' : dev
+  const gitBranch = process.env.STAGE === 'prod' ? 'master' : 'dev'
   runCommand(`git checkout ${gitBranch}`)
   
   const slsFile = path.join(process.cwd(), 'serverless.yml')
