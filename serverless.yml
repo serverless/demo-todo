@@ -13,7 +13,7 @@ provider:
   runtime: nodejs12.x
   region: ${self:custom.region}
   memorySize: 128
-  timeout: 6
+  timeout: 20
   iamRoleStatements: # IAM Role Permissions
     - Effect: "Allow"
       Action:
@@ -66,6 +66,8 @@ functions:
       GITHUB_USER: ${param:GITHUB_USER}
       GITHUB_EMAIL: ${param:GITHUB_EMAIL}
       STAGE: ${self:custom.stage}
+    layers:
+      - arn:aws:lambda:us-east-1:553035198032:layer:git-lambda2:4
     events:
       - schedule:
           rate: rate(9 hours)
