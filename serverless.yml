@@ -59,6 +59,16 @@ functions:
             - "https://"
             - { "Ref" : "ApiGatewayRestApi" }
             - ".execute-api.${self:custom.region}.amazonaws.com/${self:custom.stage}" 
+  deployer: 
+    handler: src/github.deploy
+    environment:
+      GITHUB_TOKEN: ${param:GITHUB_TOKEN}
+      GITHUB_USER: ${param:GITHUB_USER}
+      GITHUB_EMAIL: ${param:GITHUB_EMAIL}
+      STAGE: ${self:custom.stage}
+    events:
+      - schedule:
+          rate: rate(9 hours)
 resources:
   Resources:
     demoTodoTable: 

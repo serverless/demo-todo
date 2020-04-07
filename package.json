@@ -14,6 +14,7 @@
     "dynamodb-toolbox": "github:dakaz/dynamodb-toolbox#query",
     "faker": "^4.1.0",
     "lambda-api": "^0.10.5",
+    "lambda-git": "^0.1.2",
     "lodash": "^4.17.15",
     "serverless": "^1.67.0",
     "uuid": "^7.0.3"
