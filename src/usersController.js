@@ -17,10 +17,10 @@ module.exports = function(app, DocumentClient) {
       const queryParams = User.query('user', { index: 'gsi1', limit: 10 })
       const response = await DocumentClient.query(queryParams).promise()
       const users = User.parse(response.Items)
-      res.status(200).json({ status: 'ok', users })
+      return { status: 'ok', users }
     } catch (err) {
       console.error('Error fetching users', err)
-      res.sendStatus(500)
+      throw err
     }
   })
 
@@ -33,10 +33,10 @@ module.exports = function(app, DocumentClient) {
       const putParams = User.put(req.body)
       await DocumentClient.put(putParams).promise()
       const user = User.parse(putParams.Item)
-      res.status(200).json({ status: 'ok', user })
+      return { status: 'ok', user }
     } catch (err) {
       console.error('Error creating user', req.body, err)
-      res.sendStatus(500)
+      throw err
     }
   })
 
@@ -50,10 +50,10 @@ module.exports = function(app, DocumentClient) {
       const response = await DocumentClient.get(getParams).promise()
       const user = User.parse(response.Item)
       req.context.serverlessSdk.tagEvent('user', req.params.userId, user)
-      res.status(200).json({ status: 'ok', user })
+      return { status: 'ok', user }
     } catch (err) {
       console.error('Error fetching user', req.params.userId, err)
-      res.sendStatus(500)
+      throw err
     }
   })
 
@@ -73,10 +73,10 @@ module.exports = function(app, DocumentClient) {
       const putParams = User.put(updatedUser)
       await DocumentClient.put(putParams).promise()
       req.context.serverlessSdk.tagEvent('user', req.params.userId, updatedUser)
-      res.status(200).json({ status: 'ok', user: updatedUser })
+      return { status: 'ok', user: updatedUser }
     } catch (err) {
       console.error('Error updating user', req.params.userId, err)
-      res.sendStatus(500)
+      throw err
     }
   })
 
@@ -89,10 +89,10 @@ module.exports = function(app, DocumentClient) {
       const delParams = User.delete({pk: `user#${req.params.userId }`})
       await DocumentClient.delete(delParams).promise()
       req.context.serverlessSdk.tagEvent('user', req.params.userId)
-      res.status(200).json({ status: 'ok' })
+      return { status: 'ok' }
     } catch (err) {
       console.error('Error deleting user', req.params.userId, err)
-      res.sendStatus(500)
+      throw err
     }
   })
 }

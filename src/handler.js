@@ -6,7 +6,7 @@ const usersController = require('./usersController')
 
 usersController(app, DocumentClient)
 
-module.exports.router = (event, context, callback) => {
+module.exports.router = async (event, context) => {
 
   // !!!IMPORTANT: Set this flag to false, otherwise the lambda function
   // won't quit until all DB connections are closed, which is not good
@@ -14,7 +14,6 @@ module.exports.router = (event, context, callback) => {
   context.callbackWaitsForEmptyEventLoop = false
 
   // Run the request
-  app.run(event,context,callback)
-
+  return await app.run(event,context)
 }
 
