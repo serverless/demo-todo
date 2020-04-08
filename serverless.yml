@@ -14,6 +14,8 @@ provider:
   region: ${self:custom.region}
   memorySize: 128
   timeout: 20
+  environment: 
+    TODO_TABLENAME: ${self:custom.tableName}
   iamRoleStatements: # IAM Role Permissions
     - Effect: "Allow"
       Action:
@@ -40,8 +42,6 @@ provider:
 functions:
   router:
     handler: src/handler.router
-    environment: 
-      TODO_TABLENAME: ${self:custom.tableName}
     events: 
       - http:
           method: any
