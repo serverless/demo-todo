@@ -57,6 +57,9 @@ module.exports = function(app, DocumentClient) {
     }
   })
 
+  /**
+   *  Update User
+   */
   app.patch('/users/:userId', async (req,res) => {
     randomError()
     try {
@@ -73,6 +76,22 @@ module.exports = function(app, DocumentClient) {
       res.status(200).json({ status: 'ok', user: updatedUser })
     } catch (err) {
       console.error('Error updating user', req.params.userId, err)
+      res.sendStatus(500)
+    }
+  })
+
+  /**
+   * Delete a user
+   */
+  app.delete('/users/:userId', async (req,res) => {
+    randomError()
+    try {
+      const delParams = User.delete({pk: `user#${req.params.userId }`})
+      await DocumentClient.delete(delParams).promise()
+      req.context.serverlessSdk.tagEvent('user', req.params.userId)
+      res.status(200).json({ status: 'ok' })
+    } catch (err) {
+      console.error('Error deleting user', req.params.userId, err)
       res.sendStatus(500)
     }
   })
