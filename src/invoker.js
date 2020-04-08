@@ -46,6 +46,11 @@ async function getUser() {
   await axios.get(`${process.env.BASE_URL}/v1/users/${user.id}`)
 }
 
+async function getUsers() {
+  console.log('getting users')
+  await axios.get(`${process.env.BASE_URL}/v1/users`)
+}
+
 
 const actions = [
   createUser,
@@ -60,6 +65,13 @@ const actions = [
   getUser,
   getUser,
   getUser,
+  getUsers,
+  getUsers,
+  getUsers,
+  getUsers,
+  getUsers,
+  getUsers,
+  getUsers,
   updateUser,
   updateUser,
   updateUser,
