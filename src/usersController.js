@@ -31,6 +31,7 @@ module.exports = function(app, DocumentClient) {
     randomError()
     try {
       const putParams = User.put(req.body)
+      console.log({putParams})
       await DocumentClient.put(putParams).promise()
       const user = User.parse(putParams.Item)
       return { status: 'ok', user }
