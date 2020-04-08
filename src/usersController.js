@@ -70,8 +70,8 @@ module.exports = function(app, DocumentClient) {
         ...user,
         ...req.body
       }
-      const putParams = User.put(updatedUser)
-      await DocumentClient.put(putParams).promise()
+      const updateParams = User.update(updatedUser)
+      await DocumentClient.update(updateParams).promise()
       req.context.serverlessSdk.tagEvent('user', req.params.userId, updatedUser)
       return { status: 'ok', user: updatedUser }
     } catch (err) {
