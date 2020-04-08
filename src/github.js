@@ -30,6 +30,10 @@ module.exports.deploy = async function () {
 
   // change the cwd to /tmp as its the only writable directory we have access to
   process.chdir('/tmp')
+
+  // ensure the directory is empty
+  runCommand(`rm -rf ${repositoryName}`)
+  
   // clone the repository and set it as the cwd
   // sadly, clone doesn't support --porcelain
   runCommand(`git clone --quiet https://${gitRepositoryURL}`)
