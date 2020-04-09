@@ -1,5 +1,6 @@
 const { User } = require('../models/User')
 const _ = require('lodash')
+const axios = require('axios')
 
 class RandomError extends Error {
   constructor(msg, status) {
@@ -11,9 +12,15 @@ class RandomError extends Error {
 
 const randomStatus = () => _.sample([ 401, 403, 404, 405, 406, 501, 503 ])
 
-function randomError() {
-  if (_.random(20) === 1 ) {
-     RandomError('This is a random error', randomStatus())
+async function randomness() {
+  const chance = _.random(20) 
+  switch(chance) {
+    case 1:
+      RandomError('This is a random error', randomStatus())
+      break
+    case 2:
+      await axios.get('https://en.wikipedia.org/wiki/Main_Page')
+      break
   }
 }
 
@@ -23,7 +30,7 @@ module.exports = function(app, DocumentClient) {
    */
   app.get('/users', async (req,res) => {
     try {
-      randomError()
+      randomness()
       const queryParams = User.query('user', { index: 'gsi1', limit: 10 })
       const response = await DocumentClient.query(queryParams).promise()
       const users = User.parse(response.Items)
@@ -41,7 +48,7 @@ module.exports = function(app, DocumentClient) {
    *  Create a User
    */
   app.post('/users', async (req,res) => {
-    randomError()
+    randomness()
     try {
       const putParams = User.put(req.body)
       await DocumentClient.put(putParams).promise()
@@ -60,7 +67,7 @@ module.exports = function(app, DocumentClient) {
    *  Get One User
    */
   app.get('/users/:userId', async (req,res) => {
-    randomError()
+    randomness()
     try {
       const getParams = User.get({pk: `user#${req.params.userId }`})
       const response = await DocumentClient.get(getParams).promise()
@@ -80,7 +87,7 @@ module.exports = function(app, DocumentClient) {
    *  Update User
    */
   app.patch('/users/:userId', async (req,res) => {
-    randomError()
+    randomness()
     try {
       const getParams = User.get({pk: `user#${req.params.userId }`})
       let response = await DocumentClient.get(getParams).promise()
@@ -106,7 +113,7 @@ module.exports = function(app, DocumentClient) {
    * Delete a user
    */
   app.delete('/users/:userId', async (req,res) => {
-    randomError()
+    randomness()
     try {
       const delParams = User.delete({pk: `user#${req.params.userId }`})
       await DocumentClient.delete(delParams).promise()
