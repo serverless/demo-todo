@@ -1,9 +1,19 @@
-const { User } = require('./models/User')
+const { User } = require('../models/User')
 const _ = require('lodash')
+
+class RandomError extends Error {
+  constructor(msg, status) {
+    super(msg)
+    this.status = status || 500
+  }
+
+}
+
+const randomStatus = () => _.sample([ 401, 403, 404, 405, 406, 501, 503 ])
 
 function randomError() {
   if (_.random(20) === 1 ) {
-    throw new Error('This is a random error')
+     RandomError('This is a random error', randomStatus())
   }
 }
 
@@ -12,15 +22,18 @@ module.exports = function(app, DocumentClient) {
    *  Get All Users
    */
   app.get('/users', async (req,res) => {
-    randomError()
     try {
+      randomError()
       const queryParams = User.query('user', { index: 'gsi1', limit: 10 })
       const response = await DocumentClient.query(queryParams).promise()
       const users = User.parse(response.Items)
       return { status: 'ok', users }
     } catch (err) {
       console.error('Error fetching users', err)
-      throw err
+      return {
+        statusCode: error.status || 500,
+        body: JSON.stringify({ error: err.message })
+      }    
     }
   })
 
@@ -36,7 +49,10 @@ module.exports = function(app, DocumentClient) {
       return { status: 'ok', user }
     } catch (err) {
       console.error('Error creating user', req.body, err)
-      throw err
+      return {
+        statusCode: error.status || 500,
+        body: JSON.stringify({ error: err.message })
+      } 
     }
   })
 
@@ -53,7 +69,10 @@ module.exports = function(app, DocumentClient) {
       return { status: 'ok', user }
     } catch (err) {
       console.error('Error fetching user', req.params.userId, err)
-      throw err
+      return {
+        statusCode: error.status || 500,
+        body: JSON.stringify({ error: err.message })
+      } 
     }
   })
 
@@ -76,7 +95,10 @@ module.exports = function(app, DocumentClient) {
       return { status: 'ok', user: updatedUser }
     } catch (err) {
       console.error('Error updating user', req.params.userId, err)
-      throw err
+      return {
+        statusCode: error.status || 500,
+        body: JSON.stringify({ error: err.message })
+      } 
     }
   })
 
@@ -92,7 +114,10 @@ module.exports = function(app, DocumentClient) {
       return { status: 'ok' }
     } catch (err) {
       console.error('Error deleting user', req.params.userId, err)
-      throw err
+      return {
+        statusCode: error.status || 500,
+        body: JSON.stringify({ error: err.message })
+      } 
     }
   })
 }

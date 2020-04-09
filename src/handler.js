@@ -2,7 +2,7 @@ const AWS = require('aws-sdk')
 AWS.config.update({region: 'us-east-1'});
 const DocumentClient = new AWS.DynamoDB.DocumentClient()
 const app = require('lambda-api')({ version: 'v1.0', base: 'v1/' })
-const usersController = require('./usersController')
+const usersController = require('./controllers/usersController')
 
 usersController(app, DocumentClient)
 
