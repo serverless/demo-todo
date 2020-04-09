@@ -15,7 +15,12 @@ function runCommand (commandString, options) {
 
   if (cmd.status !== 0) {
     const errorString = cmd.stderr.toString()
-    console.log(JSON.stringify(cmd, null, 2))
+    console.log({
+      output: cmd.output.toString(),
+      stdout: cmd.stdout.toString(),
+      stderr: cmd.stderr.toString(),
+      status: cmd.status
+    })
     throw new Error(
       `Git command failed
       ${commandString}
