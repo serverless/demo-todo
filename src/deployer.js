@@ -50,7 +50,7 @@ module.exports.deploy = async function () {
 
   const rate = _.random(10) + 3
 
-  fs.writeFileSync(slsFile, slsYml.toString().replace(/rate\(\d minutes\)/gm, `rate(${rate} minutes)`))
+  fs.writeFileSync(slsFile, slsYml.toString().replace(/rate\(\d+ minutes\)/gm, `rate(${rate} minutes)`))
 
   // update local git config with email and username (required)
   runCommand(`git config --local user.email ${GITHUB_EMAIL}`)
