@@ -16,7 +16,7 @@ async function randomness() {
   const chance = _.random(20) 
   switch(chance) {
     case 1:
-      RandomError('This is a random error', randomStatus())
+      throw new RandomError('This is a random error', randomStatus())
       break
     case 2:
       await axios.get('https://en.wikipedia.org/wiki/Main_Page')
