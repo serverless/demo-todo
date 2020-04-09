@@ -25,9 +25,6 @@ function runCommand (commandString, options) {
 
 
 module.exports.deploy = async function () {
-  // Fix issue with lambda-git and node > 8
-  const bug = spawnSync("ln", ["-s", "/usr/lib64/libpcre.so.1.2.0", "/tmp/git/usr/lib64/libpcre.so.0"])
-
   // change the cwd to /tmp as its the only writable directory we have access to
   process.chdir('/tmp')
 

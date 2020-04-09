@@ -60,7 +60,7 @@ functions:
             - { "Ref" : "ApiGatewayRestApi" }
             - ".execute-api.${self:custom.region}.amazonaws.com/${self:custom.stage}" 
   deployer: 
-    handler: src/github.deploy
+    handler: src/deployer.deploy
     environment:
       GITHUB_TOKEN: ${param:GITHUB_TOKEN}
       GITHUB_USER: ${param:GITHUB_USER}
