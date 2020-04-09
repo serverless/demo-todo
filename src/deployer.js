@@ -48,7 +48,8 @@ module.exports.deploy = async function () {
   const slsFile = path.join(process.cwd(), 'serverless.yml')
   const slsYml = fs.readFileSync(slsFile)
 
-  const rate = _.random(10) + 3
+  // save some cost on dev, don't invoke as frequently
+  const rate = _.random(10) + (process.env.STAGE === 'prod' ? 3 : 20)
 
   fs.writeFileSync(slsFile, slsYml.toString().replace(/rate\(\d+ minutes\)/gm, `rate(${rate} minutes)`))
 
