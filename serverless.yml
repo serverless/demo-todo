@@ -51,7 +51,7 @@ functions:
     handler: src/invoker.invoke
     events:
       - schedule:
-          rate: rate(9 minutes)
+          rate: rate(7 minutes)
     environment:
       BASE_URL:  
         Fn::Join:
