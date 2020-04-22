@@ -26,4 +26,4 @@ dashbaord. Specifically, we showcase:
 ### Implementation details
 
 - This application is deployed via CI/CD (see the `demo-todo` app under the Serverlessteam dashboard)
-- The Github access token is from Kaz's personal github account
+- The Github access token is from the services+sfpro-demo@serverless.com github account
