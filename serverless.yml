@@ -1,6 +1,6 @@
 service: demo-todo
 
-org: serverlessteam
+org: servicessfprodemo 
 app: demo-todo
 
 custom:
