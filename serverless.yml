@@ -1,6 +1,6 @@
 service: demo-todo
 
-org: serverlessteam
+org: servicessfprodemo 
 app: demo-todo
 
 custom:
@@ -51,7 +51,7 @@ functions:
     handler: src/invoker.invoke
     events:
       - schedule:
-          rate: rate(11 minutes)
+          rate: rate(8 minutes)
     environment:
       BASE_URL:  
         Fn::Join:
