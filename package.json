@@ -15,7 +15,7 @@
     "faker": "^4.1.0",
     "lambda-api": "^0.10.5",
     "lodash": "^4.17.15",
-    "serverless": "^1.67.0",
+    "serverless": "^3.25.1",
     "uuid": "^7.0.3"
   }
 }
